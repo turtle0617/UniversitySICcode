@@ -12,7 +12,6 @@ fs.readFile('code.txt', 'utf8', function(err, data) {
         datasplit2.push(datasplit[i].split('\n'));
     }
     var myNewArray = [].concat.apply([], datasplit2);
-
     // console.log(datasplit3);
     // fs.writeFile('localca.txt', datasplit, function(err) {
     //     if (err) {
@@ -22,7 +21,9 @@ fs.readFile('code.txt', 'utf8', function(err, data) {
     // })
     // console.log(myNewArray);
     local(myNewArray, datasplit3, function(allpush) {
-        objectcode(allpush, mnemonic);
+        objectcode(allpush, mnemonic, function(objectcodefin, split) {
+            obcodetofile(objectcodefin, split);
+        });
     });
 });
 
@@ -116,7 +117,7 @@ function local(data, datasplit3, callback) {
         }
     }
     var allpush2 = [].concat.apply([], allpush);
-    // console.log(allpush2);
+    // console.log(allpush);
     callback(allpush2.join(''));
 
     // fs.writeFile('localca.txt', allpush2.join(''), function(err) {
@@ -128,7 +129,7 @@ function local(data, datasplit3, callback) {
 
 }
 
-function objectcode(allpush, mnemonic) {
+function objectcode(allpush, mnemonic, callback) {
     var split = allpush.split('\n'),
         split2 = [],
         split3 = [];
@@ -280,5 +281,46 @@ function objectcode(allpush, mnemonic) {
         }
 
     }
-    console.log(objectcodefin);
+    // console.log(objectcodefin);
+    callback(objectcodefin, split);
+}
+
+
+function obcodetofile(objectcodefin, split) {
+    // console.log(split);
+    var lengthsplitob = split.length,
+        obcodetofile = [],
+        ave = [];
+    var bbbb = 0;
+    for (var z = 0; z < lengthsplitob; z++) {
+        if (z == 0) {
+            obcodetofile.push(split[z] + '\t\n');
+        } else if (z == 1) {
+            var a = split[z].split('\n');
+            a.splice(0, 0, '\t\t' + objectcodefin[bbbb]);
+            // console.log(a[1]);
+            obcodetofile.push(a[1] + a[0] + '\n');
+            bbbb++;
+        } else if (split[z] != "." && z < lengthsplitob) {
+            // console.log(split[z+1].split('\n'));
+            var a = split[z].split('\n');
+            
+            if(typeof objectcodefin[bbbb] !='undefined'){
+                a.splice(0, 0, '\t\t' + objectcodefin[bbbb]);
+                obcodetofile.push(a[1] + a[0] + '\n');
+            }
+            
+            console.log(obcodetofile);
+            bbbb++;
+        } else if (z < lengthsplitob) {
+            obcodetofile.push(split[z] + '\n');
+
+        }
+    }
+    fs.writeFile('finish.txt', obcodetofile.join(''), function(err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('success');
+    });
 }

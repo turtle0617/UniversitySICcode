@@ -12,7 +12,6 @@ fs.readFile('code.txt', 'utf8', function(err, data) {
         datasplit2.push(datasplit[i].split('\n'));
     }
     var myNewArray = [].concat.apply([], datasplit2);
-
     // console.log(datasplit3);
     // fs.writeFile('localca.txt', datasplit, function(err) {
     //     if (err) {
@@ -22,7 +21,9 @@ fs.readFile('code.txt', 'utf8', function(err, data) {
     // })
     // console.log(myNewArray);
     local(myNewArray, datasplit3, function(allpush) {
-        objectcode(allpush, mnemonic);
+        objectcode(allpush, mnemonic,function(objectcodefin){
+            obcodetofile(objectcodefin);
+        });
     });
 });
 
@@ -128,7 +129,7 @@ function local(data, datasplit3, callback) {
 
 }
 
-function objectcode(allpush, mnemonic) {
+function objectcode(allpush, mnemonic,callback) {
     var split = allpush.split('\n'),
         split2 = [],
         split3 = [];
@@ -280,5 +281,11 @@ function objectcode(allpush, mnemonic) {
         }
 
     }
-    console.log(objectcodefin);
+    // console.log(objectcodefin);
+    callback(objectcodefin);
+}
+
+
+function obcodetofile (objectcodefin){
+    console.log('jeee');
 }
