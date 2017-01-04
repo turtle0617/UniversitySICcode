@@ -120,12 +120,12 @@ function local(data, datasplit3, callback) {
     // console.log(allpush);
     callback(allpush2.join(''));
 
-    // fs.writeFile('localca.txt', allpush2.join(''), function(err) {
-    //     if (err) {
-    //         console.log(err);
-    //     }
-    //     console.log('success');
-    // });
+    fs.writeFile('localca.txt', allpush2.join(''), function(err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('localca.txt success');
+    });
 
 }
 
@@ -196,12 +196,15 @@ function objectcode(allpush, mnemonic, callback) {
                                 // console.log(split2[i]);
                             }
                         }
-                        if (split2[i][split2[i].length - 1] == 'BUFFER,X') {
-                            // console.log(split2[i]);
+                        //如果含有Ｘ,如BUFFER,X
+                        if (split2[i][split2[i].length - 1].split(',').length > 1) {
+                            var hasX = split2[i][split2[i].length - 1].split(',');
+                            // console.log(hasX[0]);
                             for (var z = 0; z < split3.length; z++) {
-                                if (split3[z] == 'BUFFER') {
-                                    var buffercode = parseInt(split3[z - 1]) + 8000;
-                                    objectcodefin.push(testb + buffercode);
+                                if (split3[z] == hasX[0]) {
+                                    var hasXcode = parseInt(split3[z - 1]) + 8000;
+                                    objectcodefin.push(testb + hasXcode);
+                                    // console.log(testb + hasXcode);
                                 }
                             }
                         }
@@ -265,12 +268,15 @@ function objectcode(allpush, mnemonic, callback) {
                                 // console.log(testb + split3[z - 1]);
                             }
                         }
-                        if (split2[i][split2[i].length - 1] == 'BUFFER,X') {
-                            // console.log(split2[i]);
+                        //如果含有Ｘ,如BUFFER,X
+                        if (split2[i][split2[i].length - 1].split(',').length > 1) {
+                            var hasX = split2[i][split2[i].length - 1].split(',');
+                            // console.log(hasX[0]);
                             for (var z = 0; z < split3.length; z++) {
-                                if (split3[z] == 'BUFFER') {
-                                    var buffercode = parseInt(split3[z - 1]) + 8000;
-                                    objectcodefin.push(testb + buffercode);
+                                if (split3[z] == hasX[0]) {
+                                    var hasXcode = parseInt(split3[z - 1]) + 8000;
+                                    objectcodefin.push(testb + hasXcode);
+                                    console.log(testb + hasXcode);
                                 }
                             }
                         }
@@ -287,7 +293,7 @@ function objectcode(allpush, mnemonic, callback) {
 
 
 function obcodetofile(objectcodefin, split) {
-    // console.log(split);
+    // console.log(objectcodefin);
     var lengthsplitob = split.length,
         obcodetofile = [],
         ave = [];
@@ -304,13 +310,13 @@ function obcodetofile(objectcodefin, split) {
         } else if (split[z] != "." && z < lengthsplitob) {
             // console.log(split[z+1].split('\n'));
             var a = split[z].split('\n');
-            
-            if(typeof objectcodefin[bbbb] !='undefined'){
+
+            if (typeof objectcodefin[bbbb] != 'undefined') {
                 a.splice(0, 0, '\t\t' + objectcodefin[bbbb]);
                 obcodetofile.push(a[1] + a[0] + '\n');
             }
-            
-            console.log(obcodetofile);
+
+            // console.log(obcodetofile);
             bbbb++;
         } else if (z < lengthsplitob) {
             obcodetofile.push(split[z] + '\n');
